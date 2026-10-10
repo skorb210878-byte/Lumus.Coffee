@@ -1,0 +1,9 @@
+В проекте кофейни Lumos справа видна полоса прокрутки браузера. Нужно её скрыть, но оставить возможность скроллить страницу.
+
+Сделай так:
+1. В style.css добавь для html и body:
+   - overflow-y: scroll; (чтобы страница не «прыгала»)
+   - scrollbar-width: none; (для Firefox)
+   - -ms-overflow-style: none; (для старого Edge)
+2. Добавь правило для WebKit-браузеров (Chrome, Safari):
+   ::-webkit-scrollbar { display: none; }

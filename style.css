@@ -1,0 +1,838 @@
+/* ==========================================================================
+   ПЕРЕМЕННЫЕ — палитра вдохновлена ночным небом Большого зала и
+   золотом волшебных артефактов, а не классическим кофейным "коричневым"
+   ========================================================================== */
+
+:root {
+  /* тёплый тёмно-коричневый с оранжевым подтоном — обжаренное зерно
+     и свет камина, а не холодное ночное небо */
+  --bg: #170f0a;
+  --bg-elevated: #20140c;
+
+  --cream: #f0e6d2;       /* тёплый пергаментный текст */
+  --cream-dim: #a69c8a;   /* второстепенный текст */
+
+  --gold: #d4af37;        /* волшебное золото — главный акцент */
+  --gold-bright: #f2cf6b;
+  --rust: #8a5a36;        /* медно-ржавый — тонкие линии */
+
+  /* цвета факультетов — используются точечно, не на всей странице */
+  --gryffindor: #ae0001;
+  --gryffindor-2: #d3a625;
+  --slytherin: #1a472a;
+  --slytherin-2: #aaaaaa;
+  --ravenclaw: #222f5b;
+  --ravenclaw-2: #946b2d;
+  --hufflepuff: #ecb939;
+  --hufflepuff-2: #372e29;
+
+  --line: rgba(240, 230, 210, 0.12);
+
+  --font-display: 'Cinzel', serif;
+  --font-wordmark: 'Cinzel Decorative', 'Cinzel', serif;
+  --font-text: 'EB Garamond', serif;
+}
+
+/* ==========================================================================
+   БАЗОВЫЕ СБРОСЫ
+   ========================================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* полоса прокрутки скрыта, но место под неё зарезервировано (scroll),
+     чтобы страница не "прыгала" по ширине при переходах между секциями */
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* старый Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari и другие WebKit-браузеры */
+}
+
+body {
+  position: relative;
+  background: var(--bg);
+  color: var(--cream);
+  font-family: var(--font-text);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* вертикальный градиент: тёплый тёмно-коричневый сверху уходит
+     в почти чёрный внизу — ощущение свода, уходящего во тьму */
+  background-image: linear-gradient(180deg, #2b1a10 0%, #1a0f09 45%, #0c0705 80%, #070503 100%);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* старый Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari и другие WebKit-браузеры */
+}
+
+/* лёгкий шум поверх всего сайта — без него тёмный градиент выглядит
+   плоским и "цифровым"; шум сгенерирован SVG-турбулентностью,
+   без внешних файлов, и почти не виден на глаз */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* огонёк заклинания Lumos, который мягко следует за курсором —
+   виден только на устройствах с точным указателем (мышь), не на тач-экранах */
+.wand-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 420px;
+  height: 420px;
+  margin-left: -210px;
+  margin-top: -210px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 207, 107, 0.12) 0%, rgba(242, 207, 107, 0) 70%);
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.wand-glow.is-active {
+  opacity: 1;
+}
+
+@media (pointer: coarse) {
+  .wand-glow {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   ШАПКА
+   ========================================================================== */
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px clamp(20px, 5vw, 64px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.topbar__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-wordmark);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: var(--gold-bright);
+}
+
+.topbar__spark {
+  width: 14px;
+  height: 14px;
+  fill: var(--gold);
+}
+
+.topbar__nav {
+  display: flex;
+  gap: clamp(16px, 3vw, 32px);
+}
+
+.topbar__nav a {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--cream-dim);
+  transition: color 0.25s ease;
+}
+
+.topbar__nav a:hover,
+.topbar__nav a:focus-visible {
+  color: var(--gold);
+}
+
+/* ==========================================================================
+   1. HERO — зачарованное небо Большого зала
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 clamp(20px, 7vw, 96px);
+}
+
+/* звёздное небо: точки добавляются через JS (script.js), здесь только
+   контейнер и анимация мерцания, которую JS-звёзды используют */
+.hero__stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__stars span {
+  position: absolute;
+  display: block;
+  width: 2px;
+  height: 2px;
+  background: var(--cream);
+  border-radius: 50%;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.9; }
+}
+
+/* парящие свечи — только под "потолком" сцены, как в Большом зале.
+   6 штук на фиксированных позициях в верхней полосе экрана, крупнее
+   и с тёплым ореолом, покачиваются медленно и плавно */
+.hero__candles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.candle-wrap {
+  position: absolute;
+  pointer-events: none;
+}
+
+.candle {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 78px;
+  border-radius: 3px 3px 2px 2px;
+  /* объёмный воск: светлая грань слева, тень справа, как у настоящего цилиндра */
+  background: linear-gradient(90deg, #fffaf0 0%, #f2e7d2 30%, #d9c9a3 55%, #b7a478 78%, #9c8a63 100%);
+  box-shadow:
+    inset -4px 0 6px rgba(40, 28, 10, 0.35),
+    inset 2px 0 3px rgba(255, 255, 255, 0.5),
+    0 10px 18px rgba(0, 0, 0, 0.35);
+  /* медленное покачивание вверх-вниз, без резких движений */
+  animation: candleFloat 9s ease-in-out infinite;
+}
+
+/* лужица мягкого воска у верхнего края свечи */
+.candle::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #fffaf0, #cdb98c);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* подтёк воска на одной стороне — убирает "спичечную" геометричность */
+.candle::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: -2px;
+  width: 4px;
+  height: 22px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(180deg, #f2e7d2, #c3b084);
+  opacity: 0.9;
+}
+
+.candle__wick {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 2px;
+  height: 9px;
+  background: #342a1c;
+  transform: translateX(-50%);
+}
+
+.candle__flame {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  width: 17px;
+  height: 33px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 50% 85%, #fff6d8 0%, var(--gold-bright) 26%, var(--gold) 50%, #c06a1f 72%, #8a4414 92%);
+  /* острая капля-язычок пламени: заострённый верх, округлое основание —
+     вместо прямоугольника со скруглёнными углами */
+  clip-path: path('M8.5 0C8.5 0 1 17 1 24C1 29 4.5 33 8.5 33C12.5 33 16 29 16 24C16 17 8.5 0 8.5 0Z');
+  animation: flicker 2.4s ease-in-out infinite;
+}
+
+/* тёплое синеватое основание пламени — так оно читается как настоящий
+   огонь, а не плоское пятно цвета */
+.candle__flame::before {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  width: 6px;
+  height: 8px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, #7fb4ff 0%, rgba(127, 180, 255, 0) 75%);
+  opacity: 0.55;
+  border-radius: 50%;
+}
+
+/* тёплый ореол вокруг огня — висит на самой свече (которая только
+   покачивается), а не на пламени (которое мерцает и "плющит" форму),
+   поэтому не превращается в заметный смещённый круг. Сделан крупным
+   и заметным — свечи должны читаться как источник света в темноте */
+.candle__glow {
+  position: absolute;
+  top: -52px;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(242, 207, 107, 0.35) 0%, rgba(242, 207, 107, 0.14) 45%, rgba(242, 207, 107, 0) 75%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@keyframes candleFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(0.6deg); }
+}
+
+@keyframes flicker {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  45% { transform: translateX(-50%) scale(0.9, 1.08); opacity: 0.85; }
+  60% { transform: translateX(-52%) scale(1.06, 0.94); opacity: 1; }
+}
+
+/* тусклые силуэты готических окон по краям hero — только для атмосферы,
+   сильно размыты и почти прозрачны, чтобы не отвлекать от текста */
+.hero__arch {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: clamp(140px, 16vw, 260px);
+  z-index: 0;
+  opacity: 0.22;
+  filter: blur(7px);
+  pointer-events: none;
+}
+
+.hero__arch--left {
+  left: -40px;
+}
+
+.hero__arch--right {
+  right: -20px;
+  width: clamp(160px, 18vw, 290px);
+  opacity: 0.42;
+  filter: blur(1.5px) drop-shadow(0 0 30px rgba(242, 207, 107, 0.12));
+}
+
+/* волшебная пыль — мелкие тусклые золотые искры, медленно плывущие
+   вверх и в сторону; точки добавляет script.js, здесь только анимация */
+.hero__dust {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__dust span {
+  position: absolute;
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 207, 107, 0.9) 0%, rgba(242, 207, 107, 0) 70%);
+  filter: blur(0.3px);
+  opacity: 0;
+  animation: dustDrift linear infinite;
+}
+
+@keyframes dustDrift {
+  0% { transform: translate(0, 0); opacity: 0; }
+  12% { opacity: var(--dust-peak, 0.4); }
+  50% { transform: translate(var(--dust-dx, 20px), -70px); opacity: var(--dust-peak, 0.4); }
+  88% { opacity: 0.1; }
+  100% { transform: translate(calc(var(--dust-dx, 20px) * 1.6), -150px); opacity: 0; }
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.hero__eyebrow {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+
+.hero__title {
+  font-family: var(--font-wordmark);
+  font-weight: 700;
+  font-size: clamp(64px, 13vw, 140px);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  margin-bottom: 28px;
+  color: var(--gold-bright);
+  text-shadow: 0 0 40px rgba(242, 207, 107, 0.35), 0 0 90px rgba(242, 207, 107, 0.12);
+}
+
+.hero__tagline {
+  font-size: clamp(17px, 2vw, 20px);
+  font-style: italic;
+  color: var(--cream-dim);
+  max-width: 48ch;
+  margin-bottom: 40px;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero__scroll {
+  position: absolute;
+  left: clamp(20px, 7vw, 96px);
+  bottom: 40px;
+  width: 1px;
+  height: 56px;
+  background: var(--line);
+}
+
+.hero__scroll span {
+  display: block;
+  width: 1px;
+  height: 18px;
+  background: var(--gold);
+  animation: scrollDown 2.2s ease-in-out infinite;
+}
+
+@keyframes scrollDown {
+  0% { transform: translateY(0); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(56px); opacity: 0; }
+}
+
+/* ==========================================================================
+   КНОПКИ
+   ========================================================================== */
+
+.btn {
+  display: inline-block;
+  padding: 16px 34px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.btn--primary {
+  background: var(--gold);
+  color: #1a1310;
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  transform: translateY(-2px);
+  background: var(--gold-bright);
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.35);
+}
+
+.btn--ghost {
+  border: 1px solid var(--line);
+  color: var(--cream);
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ==========================================================================
+   ОБЩИЕ СЕКЦИИ
+   ========================================================================== */
+
+.section {
+  padding: clamp(80px, 12vw, 140px) clamp(20px, 7vw, 96px);
+  border-top: 1px solid var(--line);
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.section--alt {
+  background: var(--bg-elevated);
+}
+
+.section__inner {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.section__inner--narrow {
+  max-width: 640px;
+}
+
+.section__eyebrow {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(32px, 4vw, 48px);
+  margin-bottom: clamp(40px, 6vw, 64px);
+}
+
+/* Появление секций при прокрутке */
+.section,
+.hero__inner {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero__inner {
+  opacity: 1;
+  transform: none;
+}
+
+.section.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section,
+  .hero__scroll span,
+  .candle,
+  .candle__flame,
+  .hero__stars span,
+  .hero__dust span {
+    transition: none;
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   2. МЕНЮ
+   ========================================================================== */
+
+.menu-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.menu-item {
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.menu-item__row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.menu-item__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(19px, 2.4vw, 23px);
+  white-space: nowrap;
+}
+
+.menu-item__row::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px dotted var(--line);
+  transform: translateY(-4px);
+}
+
+.menu-item__price {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.menu-item__desc {
+  margin-top: 8px;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--cream-dim);
+  max-width: 56ch;
+}
+
+/* ==========================================================================
+   3. ФАКУЛЬТЕТЫ
+   ========================================================================== */
+
+.houses__intro {
+  font-style: italic;
+  color: var(--cream-dim);
+  max-width: 60ch;
+  margin-top: -24px;
+  margin-bottom: 48px;
+}
+
+.houses {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.house-card {
+  padding: 28px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.house-card:hover {
+  transform: translateY(-6px);
+}
+
+.house-card__crest {
+  display: block;
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+
+.house-card h3 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  margin-bottom: 4px;
+}
+
+.house-card__trait {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  margin-bottom: 14px;
+}
+
+.house-card__desc {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--cream-dim);
+}
+
+.house-card--gryffindor:hover {
+  border-color: var(--gryffindor-2);
+  box-shadow: 0 10px 32px rgba(174, 0, 1, 0.25);
+}
+.house-card--gryffindor h3 { color: var(--gryffindor-2); }
+
+.house-card--slytherin:hover {
+  border-color: var(--slytherin-2);
+  box-shadow: 0 10px 32px rgba(26, 71, 42, 0.35);
+}
+.house-card--slytherin h3 { color: #7fae8f; }
+
+.house-card--ravenclaw:hover {
+  border-color: var(--ravenclaw-2);
+  box-shadow: 0 10px 32px rgba(34, 47, 91, 0.4);
+}
+.house-card--ravenclaw h3 { color: #8ea0e0; }
+
+.house-card--hufflepuff:hover {
+  border-color: var(--hufflepuff);
+  box-shadow: 0 10px 32px rgba(236, 185, 57, 0.25);
+}
+.house-card--hufflepuff h3 { color: var(--hufflepuff); }
+
+/* ==========================================================================
+   4. О НАС
+   ========================================================== */
+
+.about-text {
+  font-size: clamp(17px, 2vw, 19px);
+  color: var(--cream-dim);
+  max-width: 62ch;
+}
+
+.about-text__drop {
+  float: left;
+  font-family: var(--font-wordmark);
+  font-size: 72px;
+  line-height: 0.8;
+  color: var(--gold);
+  padding-right: 10px;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   5. КОНТАКТЫ
+   ========================================================================== */
+
+.contacts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(32px, 5vw, 56px);
+}
+
+.contacts__block h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--gold);
+}
+
+.contacts__block p {
+  color: var(--cream-dim);
+  font-size: 16px;
+}
+
+.contacts__hint {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 13px;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.contacts__block a {
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.contacts__block a:hover,
+.contacts__block a:focus-visible {
+  color: var(--gold);
+}
+
+.contacts__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.contacts__row + .contacts__row {
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   ФУТЕР
+   ========================================================================== */
+
+.footer {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  padding: 32px clamp(20px, 7vw, 96px) 40px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--cream-dim);
+  border-top: 1px solid var(--line);
+}
+
+/* ==========================================================================
+   АДАПТИВ ПОД ТЕЛЕФОН
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .houses {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar__nav {
+    gap: 14px;
+  }
+
+  .topbar__nav a {
+    font-size: 13px;
+  }
+
+  .hero__arch {
+    opacity: 0.14;
+    width: 110px;
+  }
+
+  .candle-wrap {
+    transform: scale(0.75);
+  }
+
+  .menu-item__row {
+    flex-wrap: wrap;
+  }
+
+  .contacts {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .houses {
+    grid-template-columns: 1fr;
+  }
+}

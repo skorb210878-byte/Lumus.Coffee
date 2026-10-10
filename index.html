@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumos — волшебная кофейня</title>
+
+  <!-- Cinzel — готический "магический" заголовочный шрифт,
+       EB Garamond — тёплый книжный текст, как со страниц старого фолианта -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- огонёк заклинания Lumos, следующий за курсором мыши -->
+  <div class="wand-glow" id="wandGlow" aria-hidden="true"></div>
+
+  <!-- ==========================================================
+       ШАПКА
+       ========================================================== -->
+  <header class="topbar">
+    <span class="topbar__mark">
+      <svg class="topbar__spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z"/></svg>
+      Lumos
+    </span>
+    <nav class="topbar__nav">
+      <a href="#menu">Меню</a>
+      <a href="#houses">Факультеты</a>
+      <a href="#about">О нас</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+  </header>
+
+  <!-- ==========================================================
+       1. HERO — зачарованное небо Большого зала
+       ========================================================== -->
+  <section class="hero">
+    <!-- тусклые силуэты готических окон по краям — для атмосферы,
+         очень низкая непрозрачность и размытие, чтобы не отвлекали -->
+    <svg class="hero__arch hero__arch--left" viewBox="0 0 220 500" aria-hidden="true">
+      <path d="M30 500 L30 190 C30 90 70 30 110 10 C150 30 190 90 190 190 L190 500 Z" fill="#000" opacity="0.5"/>
+      <path d="M110 10 L110 500 M30 260 L190 260" stroke="#000" stroke-width="4" opacity="0.4"/>
+    </svg>
+    <svg class="hero__arch hero__arch--right" viewBox="0 0 220 500" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="archGlass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6b4526"/>
+          <stop offset="55%" stop-color="#2c1b10"/>
+          <stop offset="100%" stop-color="#120b06"/>
+        </linearGradient>
+        <radialGradient id="archGlow" cx="50%" cy="26%" r="55%">
+          <stop offset="0%" stop-color="#f2cf6b" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#f2cf6b" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- стекло со стороны тёплого света -->
+      <path d="M30 500 L30 190 C30 92 68 32 110 14 C152 32 190 92 190 190 L190 500 Z" fill="url(#archGlass)"/>
+      <path d="M30 500 L30 190 C30 92 68 32 110 14 C152 32 190 92 190 190 L190 500 Z" fill="url(#archGlow)"/>
+
+      <!-- каменная рама арки -->
+      <path d="M20 500 L20 190 C20 85 65 20 110 0 C155 20 200 85 200 190 L200 500" fill="none" stroke="#120b06" stroke-width="9" opacity="0.8"/>
+      <path d="M30 500 L30 190 C30 92 68 32 110 14 C152 32 190 92 190 190 L190 500" fill="none" stroke="#1f140c" stroke-width="2" opacity="0.6"/>
+
+      <!-- переплёт окна: вертикальная и две горизонтальные перекладины -->
+      <path d="M110 14 L110 500 M30 210 L190 210 M30 350 L190 350" stroke="#120b06" stroke-width="3" opacity="0.75"/>
+
+      <!-- небольшая готическая розетка над переплётом -->
+      <circle cx="110" cy="72" r="16" fill="none" stroke="#120b06" stroke-width="2.5" opacity="0.7"/>
+      <path d="M110 56 L110 88 M94 72 L126 72 M99 61 L121 83 M121 61 L99 83" stroke="#120b06" stroke-width="1.4" opacity="0.5"/>
+    </svg>
+
+    <div class="hero__stars" id="heroStars" aria-hidden="true"></div>
+
+    <!-- волшебная пыль — медленно плывущие по экрану искры, добавляются
+         через script.js вместе со звёздами -->
+    <div class="hero__dust" id="heroDust" aria-hidden="true"></div>
+
+    <!-- свечи расставляет script.js по сетке со случайным сдвигом —
+         разбросаны по всему экрану, но обходят текст, кнопки и шапку -->
+    <div class="hero__candles" id="heroCandles" aria-hidden="true"></div>
+
+    <div class="hero__inner">
+      <p class="hero__eyebrow">✦ Кофейня для магов и маглов ✦</p>
+      <h1 class="hero__title">Lumos</h1>
+      <p class="hero__tagline">Зёрна обжариваем в котле на медленном огне, пар над чашкой вьётся совсем
+        как над свежесваренным зельем, а столик у окна зачарован — он почти всегда свободен для вас.</p>
+      <div class="hero__actions">
+        <a href="#contacts" class="btn btn--primary">Забронировать столик</a>
+        <a href="#menu" class="btn btn--ghost">Открыть меню</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <span></span>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       2. МЕНЮ
+       ========================================================== -->
+  <section class="section" id="menu">
+    <div class="section__inner">
+      <p class="section__eyebrow">Карта напитков и сладостей</p>
+      <h2 class="section__title">Меню</h2>
+
+      <ul class="menu-list">
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Феликс Фелицис</h3>
+            <span class="menu-item__price">320 ₽</span>
+          </div>
+          <p class="menu-item__desc">Золотистый эспрессо-тоник с цедрой апельсина — говорят, после него день складывается удачно</p>
+        </li>
+
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Усладэль-латте</h3>
+            <span class="menu-item__price">290 ₽</span>
+          </div>
+          <p class="menu-item__desc">Карамель, мускатный орех и бархатное молоко — наш ответ на сливочное пиво</p>
+        </li>
+
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Оборотное матча</h3>
+            <span class="menu-item__price">310 ₽</span>
+          </div>
+          <p class="menu-item__desc">Изумрудная матча меняет оттенок, пока молоко растворяется в чашке</p>
+        </li>
+
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Фильтр-кофе «Запретный лес»</h3>
+            <span class="menu-item__price">280 ₽</span>
+          </div>
+          <p class="menu-item__desc">Тёмная обжарка с нотами лесного ореха и дымка, завариваем на V60 под заказ</p>
+        </li>
+
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Тыквенный сок волшебника</h3>
+            <span class="menu-item__price">250 ₽</span>
+          </div>
+          <p class="menu-item__desc">Свежая тыква, корица и имбирь — согревает не хуже camina в гостиной факультета</p>
+        </li>
+
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Котелки с шоколадом</h3>
+            <span class="menu-item__price">230 ₽</span>
+          </div>
+          <p class="menu-item__desc">Мини-кексы в форме котла с тёмной шоколадной глазурью, печём каждое утро</p>
+        </li>
+
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Сахарные перья</h3>
+            <span class="menu-item__price">180 ₽</span>
+          </div>
+          <p class="menu-item__desc">Хрустящие эклеры-«перья» с ванильным кремом — макнуть в кофе и загадать желание</p>
+        </li>
+
+        <li class="menu-item">
+          <div class="menu-item__row">
+            <h3 class="menu-item__name">Сырники «Патронус»</h3>
+            <span class="menu-item__price">380 ₽</span>
+          </div>
+          <p class="menu-item__desc">Домашний творог, соус из серебристых ягод, щепотка ванили — защищает от плохого настроения</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       3. ФАКУЛЬТЕТЫ — выбери свой напиток по характеру
+       ========================================================== -->
+  <section class="section section--alt" id="houses">
+    <div class="section__inner">
+      <p class="section__eyebrow">Распределение по вкусу</p>
+      <h2 class="section__title">Выбери свой факультет</h2>
+      <p class="houses__intro">Не знаешь, что заказать? Волшебная шляпа кофейни подскажет — каждому факультету
+        своя чашка.</p>
+
+      <div class="houses">
+        <div class="house-card house-card--gryffindor">
+          <span class="house-card__crest">🦁</span>
+          <h3>Гриффиндор</h3>
+          <p class="house-card__trait">для смелых</p>
+          <p class="house-card__desc">Двойной эспрессо без молока — бодрит, как прыжок на метле без страховки</p>
+        </div>
+
+        <div class="house-card house-card--slytherin">
+          <span class="house-card__crest">🐍</span>
+          <h3>Слизерин</h3>
+          <p class="house-card__trait">для хитрых</p>
+          <p class="house-card__desc">Оборотное матча — изысканно, холодно и с секретом внутри</p>
+        </div>
+
+        <div class="house-card house-card--ravenclaw">
+          <span class="house-card__crest">🦅</span>
+          <h3>Когтевран</h3>
+          <p class="house-card__trait">для мудрых</p>
+          <p class="house-card__desc">Фильтр-кофе «Запретный лес» — чистый вкус без лишних примесей</p>
+        </div>
+
+        <div class="house-card house-card--hufflepuff">
+          <span class="house-card__crest">🦡</span>
+          <h3>Пуффендуй</h3>
+          <p class="house-card__trait">для верных</p>
+          <p class="house-card__desc">Усладэль-латте — тёплый, сладкий и всегда по-домашнему уютный</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       4. О НАС
+       ========================================================== -->
+  <section class="section" id="about">
+    <div class="section__inner section__inner--narrow">
+      <p class="section__eyebrow">Легенда заведения</p>
+      <h2 class="section__title">О нас</h2>
+      <p class="about-text">
+        <span class="about-text__drop">М</span>ы открылись в 2019 году в тихом переулке, где старая
+        букинистическая лавка соседствует с мастерской часовщика — обжарочная машина встала у нас
+        вместо котла, но дым от неё пахнет точно так же волшебно. Зёрна привозим сами, обжариваем
+        мелкими партиями и всегда готовы рассказать, чем промывная обработка отличается от натуральной —
+        если вам интересно, а если нет, просто принесём то, что вкусно и будто немного заколдовано.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       5. КОНТАКТЫ
+       ========================================================== -->
+  <section class="section section--alt" id="contacts">
+    <div class="section__inner">
+      <p class="section__eyebrow">Как нас найти</p>
+      <h2 class="section__title">Контакты</h2>
+
+      <div class="contacts">
+        <div class="contacts__block">
+          <h3>Адрес</h3>
+          <p>ул. Малая Садовая, 7<br>Санкт-Петербург<br><span class="contacts__hint">вход со двора, ищите дверь без ручки</span></p>
+        </div>
+
+        <div class="contacts__block">
+          <h3>Телефон</h3>
+          <p><a href="tel:+78121234567">+7 (812) 123-45-67</a></p>
+          <p class="contacts__hint">сов пока не принимаем, только звонки</p>
+        </div>
+
+        <div class="contacts__block">
+          <h3>Часы работы</h3>
+          <p>
+            <span class="contacts__row"><span>Пн–Пт</span><span>8:00–21:00</span></span>
+            <span class="contacts__row"><span>Сб–Вс</span><span>9:00–22:00</span></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>✦ Lumos, волшебная кофейня · с 2019 года ✦</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
